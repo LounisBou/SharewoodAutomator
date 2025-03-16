@@ -10,11 +10,11 @@ setup(
     name="sharewoodautomator",
     version="0.1.0",
     author="ShareWoodAutomator",
-    author_email="author@example.com",
+    author_email="lounis.bou@gmail.com",
     description="A Python library that automates interactions with ShareWood.tv",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/author/sharewoodautomator",
+    url="https://github.com/LounisBou/sharewoodautomator",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -22,6 +22,8 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Topic :: Internet",
@@ -35,7 +37,7 @@ setup(
     ],
     keywords="sharewood, torrent, automation, scraper, downloader",
     project_urls={
-        "Bug Reports": "https://github.com/author/sharewoodautomator/issues",
-        "Source": "https://github.com/author/sharewoodautomator",
+        "Bug Reports": "https://github.com/LounisBou/sharewoodautomator/issues",
+        "Source": "https://github.com/LounisBou/sharewoodautomator",
     },
 )
