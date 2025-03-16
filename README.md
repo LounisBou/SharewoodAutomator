@@ -1,5 +1,7 @@
 # ShareWoodAutomator
 
+** WARNINGS: This is currently work in progress"
+
 ShareWoodAutomator is a Python library that automates interactions with ShareWood.tv, allowing users to search, scrape, and download torrents programmatically.
 
 ## Features
