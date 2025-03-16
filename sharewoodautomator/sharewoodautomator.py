@@ -3,7 +3,9 @@
 
 import os
 from dotenv import load_dotenv
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.chrome.service import Service as ChromeService
 from .sharewoodlogging import ShareWoodLogging
 from .sharewoodsearch import ShareWoodSearch
 from .sharewoodsearchcriteria import ShareWoodSearchCriteria
@@ -58,9 +60,10 @@ class ShareWoodAutomator:
             "PASSWORD": os.getenv("PASSWORD"),
         }
     
-    def _init_driver(self, headless: bool) -> Chrome:
+    def _init_driver(self, headless: bool) -> None:
         """ 
-        Initialize Chrome WebDriver with security optimizations"
+        Initialize Chrome WebDriver with security optimizations
+        Install Chrome service if not found
         
         Args:
             headless: Run browser in headless mode
@@ -75,11 +78,10 @@ class ShareWoodAutomator:
         options.add_argument("--disable-dev-shm-usage") # Disable dev-shm usage
 
         # Initialize Chrome WebDriver
-        driver = Chrome(options=options)
-        driver.set_page_load_timeout(30)
+        self.driver = Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+        self.driver.set_page_load_timeout(30)
 
-        return driver
-    
+
     def connect(self) -> None:
         """
         Connect to ShareWood.tv
