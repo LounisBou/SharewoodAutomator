@@ -63,8 +63,8 @@ class ShareWoodAutomator:
     def _init_driver(self, headless: bool) -> None:
         """ 
         Initialize Chrome WebDriver with security optimizations
-        Install Chrome service if not found
-        
+        Install Chrome WebDriver if not found
+
         Args:
             headless: Run browser in headless mode
         """
