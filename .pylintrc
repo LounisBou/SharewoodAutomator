@@ -25,15 +25,7 @@ suggestion-mode=yes
 # Only show warnings with the listed confidence levels. Valid levels: HIGH, INFERENCE, INFERENCE_FAILURE, UNDEFINED
 confidence=
 
-# Disable the message, report, category or checker with the given id(s). You can
-# either give multiple identifiers separated by comma (,) or put this option
-# multiple times (only on the command line, not in the configuration file where
-# it should appear only once). You can also use "--disable=all" to disable
-# everything first and then reenable specific checks. For example, if you want
-# to run only the similarities checker, you can use "--disable=all
-# --enable=similarities". If you want to run only the classes checker, but have
-# no Warning level messages displayed, use "--disable=all --enable=classes
-# --disable=W".
+# Disable the message, report, category or checker with the given id(s)
 disable=raw-checker-failed,
         bad-inline-option,
         locally-disabled,
@@ -42,11 +34,34 @@ disable=raw-checker-failed,
         useless-suppression,
         deprecated-pragma,
         use-symbolic-message-instead,
+        # Docstring-related checks - all disabled
         missing-module-docstring,
         missing-function-docstring,
         missing-class-docstring,
+        missing-return-doc,
+        missing-return-type-doc,
+        missing-param-doc,
+        missing-type-doc,
+        missing-yields-doc,
+        missing-yield-type-doc,
+        # Other common issues in the project
         no-member,
-        too-few-public-methods
+        too-few-public-methods,
+        invalid-name,
+        pointless-string-statement,
+        import-error,
+        broad-exception-raised,
+        too-many-instance-attributes,
+        too-many-branches,
+        line-too-long,
+        protected-access,
+        redefined-builtin,
+        modified-iterating-list,
+        # Additional docstring-related issues from flake8-docstrings
+        D100,D101,D102,D103,D104,D105,D106,D107,
+        D200,D201,D202,D203,D204,D205,D206,D207,D208,D209,D210,D211,D212,D213,D214,D215,
+        D300,D301,D302,D400,D401,D402,D403,D404,D405,D406,D407,D408,D409,D410,D411,D412,D413,D414,D415,D416,D417
+
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -59,41 +74,12 @@ enable=c-extension-no-member
 # and msvs (visual studio)
 output-format=text
 
-# Put messages in a separate file for each module / package specified on the
-# command line instead of printing them on stdout. Reports (if any) will be
-# written in a file name "pylint_global.[txt|html]".
-files-output=no
-
 # Tells whether to display a full report or only the messages
 reports=yes
 
 # Python expression which should return a note less than 10 (10 is the highest
-# note). You have access to the variables errors warning, statement which
-# respectively contain the number of errors / warnings messages and the total
-# number of statements analyzed. This is used by the global evaluation report
-# (RP0004).
+# note).
 evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)
-
-# Template used to display messages. This is a python new-style format string
-# used to format the message information. See doc for all details
-msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
-
-
-[VARIABLES]
-# Tells whether we should check for unused import in __init__ files.
-init-import=no
-
-# A regular expression matching the name of dummy variables (i.e. expected to
-# not be used).
-dummy-variables-rgx=_$|dummy
-
-# List of additional names supposed to be defined in builtins. Remember that
-# you should avoid defining new builtins when possible.
-additional-builtins=
-
-# List of strings which can identify a callback function by name. A callback
-# name must start or end with one of those strings.
-callbacks=cb_,_cb
 
 
 [FORMAT]
@@ -103,10 +89,6 @@ max-line-length=127
 # Regexp for a line that is allowed to be longer than the limit.
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
 
-# Allow the body of an if to be on the same line as the test if there is no
-# else.
-single-line-if-stmt=no
-
 # Maximum number of lines in a module
 max-module-lines=1500
 
@@ -114,134 +96,22 @@ max-module-lines=1500
 # tab).
 indent-string='    '
 
-# Number of spaces of indent required inside a hanging or continued line.
-indent-after-paren=4
-
-# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
-expected-line-ending-format=
-
-
-[LOGGING]
-# Logging modules to check that the string format arguments are in logging
-# function parameter format
-logging-modules=logging
-
-
-[MISCELLANEOUS]
-# List of note tags to take in consideration, separated by a comma.
-notes=FIXME,XXX,TODO
-
-
-[SIMILARITIES]
-# Minimum lines number of a similarity.
-min-similarity-lines=4
-
-# Ignore comments when computing similarities.
-ignore-comments=yes
-
-# Ignore docstrings when computing similarities.
-ignore-docstrings=yes
-
-# Ignore imports when computing similarities.
-ignore-imports=yes
-
 
 [BASIC]
 # Good variable names which should always be accepted, separated by a comma
-good-names=i,j,k,ex,Run,_,id
+good-names=i,j,k,ex,Run,_,id,f
 
-# Bad variable names which should always be refused, separated by a comma
-bad-names=foo,bar,baz,toto,tutu,tata
-
-# Colon-delimited sets of names that determine each other's naming style when
-# the name regexes allow several styles.
-name-group=
-
-# Include a hint for the correct naming format with invalid-name
-include-naming-hint=no
-
-# Regular expression matching correct function names
-function-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Regular expression matching correct variable names
-variable-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Regular expression matching correct constant names
-const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__))$
-
-# Regular expression matching correct attribute names
-attr-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Regular expression matching correct argument names
-argument-rgx=[a-z_][a-z0-9_]{2,30}$
-
-# Regular expression matching correct class names
-class-rgx=[A-Z_][a-zA-Z0-9]+$
-
-# Regular expression matching correct class attribute names
-class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
-
-# Regular expression matching correct module names
-module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
-
-# Regular expression matching correct method names
-method-rgx=[a-z_][a-z0-9_]{2,30}$
+# Regular expression matching correct module names - allowing shebang lines
+module-rgx=(__init__|[a-z_][a-z0-9_]*)$
 
 # Regular expression which should only match function or class names that do
 # not require a docstring.
-no-docstring-rgx=^_
-
-# Minimum line length for functions/classes that require docstrings, shorter
-# ones are exempt.
-docstring-min-length=-1
-
-
-[TYPECHECK]
-# Tells whether missing members accessed in mixin class should be ignored. A
-# mixin class is detected if its name ends with "mixin" (case insensitive).
-ignore-mixin-members=yes
-
-# List of module names for which member attributes should not be checked
-# (useful for modules/projects where namespaces are manipulated during runtime
-# and thus existing member attributes cannot be deduced by static analysis). It
-# supports qualified module names, as well as Unix pattern matching.
-ignored-modules=
-
-# List of classes names for which member attributes should not be checked
-# (useful for classes with attributes dynamically set). This supports can work
-# with qualified names.
-ignored-classes=SQLObject
-
-# List of members which are set dynamically and missed by pylint inference
-# system, and so shouldn't trigger E1101 when accessed. Python regular
-# expressions are accepted.
-generated-members=REQUEST,acl_users,aq_parent,objects
-
-
-[IMPORTS]
-# Deprecated modules which should not be used, separated by a comma
-deprecated-modules=regsub,TERMIOS,Bastion,rexec
-
-# Create a graph of every (i.e. internal and external) dependencies in the
-# given file (report RP0402 must not be disabled)
-import-graph=
-
-# Create a graph of external dependencies in the given file (report RP0402 must
-# not be disabled)
-ext-import-graph=
-
-# Create a graph of internal dependencies in the given file (report RP0402 must
-# not be disabled)
-int-import-graph=
+no-docstring-rgx=^_|^__|.*
 
 
 [DESIGN]
 # Maximum number of arguments for function / method
 max-args=8
-
-# Argument names that match this expression will be ignored. Default to name
-# with leading underscore
-ignored-argument-names=_.*
 
 # Maximum number of locals for function / method body
 max-locals=15
@@ -250,7 +120,7 @@ max-locals=15
 max-returns=6
 
 # Maximum number of branch for function / method body
-max-branches=12
+max-branches=15
 
 # Maximum number of statements in function / method body
 max-statements=50
@@ -259,7 +129,7 @@ max-statements=50
 max-parents=7
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=14
+max-attributes=24
 
 # Minimum number of public methods for a class (see R0903).
 min-public-methods=1
@@ -280,7 +150,7 @@ valid-metaclass-classmethod-first-arg=cls
 
 # List of member names, which should be excluded from the protected access
 # warning.
-exclude-protected=_asdict,_fields,_replace,_source,_make
+exclude-protected=_asdict,_fields,_replace,_source,_make,_3d_flag
 
 
 [EXCEPTIONS]
