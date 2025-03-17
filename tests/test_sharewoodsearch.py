@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest  # noqa: F401
+
 from sharewoodautomator import ShareWoodSearch, ShareWoodSearchCriteria
+
 
 class TestShareWoodSearch:
     """Tests for the ShareWoodSearch class"""
@@ -35,7 +38,7 @@ class TestShareWoodSearch:
         mock_form.find_element.return_value = mock_input
         
         with patch('sharewoodautomator.sharewoodsearch.WebDriverWait') as mock_wait:
-            with patch('sharewoodautomator.sharewoodsearch.EC') as mock_ec:
+            with patch('sharewoodautomator.sharewoodsearch.EC'):
                 # Set up mock WebDriverWait to return our mock form
                 mock_wait.return_value.until.return_value = mock_form
                 
@@ -54,7 +57,7 @@ class TestShareWoodSearch:
                 )
                 
                 # Execute
-                searcher._fill_search_form_from_criteria(criteria)
+                searcher.fill_search_form_from_criteria(criteria)
                 
                 # Verify
                 assert mock_chrome_driver.get.called_with(search_url)
@@ -81,7 +84,7 @@ class TestShareWoodSearch:
         mock_form.find_element.return_value = mock_select
         
         with patch('sharewoodautomator.sharewoodsearch.WebDriverWait') as mock_wait:
-            with patch('sharewoodautomator.sharewoodsearch.EC') as mock_ec:
+            with patch('sharewoodautomator.sharewoodsearch.EC'):
                 # Set up mock WebDriverWait to return our mock form
                 mock_wait.return_value.until.return_value = mock_form
                 
@@ -96,7 +99,7 @@ class TestShareWoodSearch:
                 )
                 
                 # Execute
-                searcher._apply_filters_from_criteria(criteria)
+                searcher.apply_filters_from_criteria(criteria)
                 
                 # Verify
                 # Check that WebDriverWait was called
@@ -171,7 +174,7 @@ class TestShareWoodSearch:
             searcher = ShareWoodSearch(mock_chrome_driver, search_url)
             
             # Execute
-            results = searcher._parse_search_result(html_result)
+            searcher.parse_search_result(html_result)
             
             # Verify
             assert mock_bs.called
@@ -183,14 +186,13 @@ class TestShareWoodSearch:
         search_url = "https://www.sharewood.tv/torrents"
         
         # Mock the search form and results
-        mock_form = MagicMock()
         mock_results = MagicMock()
         mock_results.get_attribute.return_value = "<html>Result</html>"
         
         with patch.object(ShareWoodSearch, '_fill_search_form_from_criteria') as mock_fill:
             with patch.object(ShareWoodSearch, '_apply_filters_from_criteria') as mock_apply:
                 with patch('sharewoodautomator.sharewoodsearch.WebDriverWait') as mock_wait:
-                    with patch('sharewoodautomator.sharewoodsearch.EC') as mock_ec:
+                    with patch('sharewoodautomator.sharewoodsearch.EC'):
                         # Set up mock WebDriverWait to return our mock results
                         mock_wait.return_value.until.return_value = mock_results
                         

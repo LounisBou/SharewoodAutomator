@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+
 from .sharewoodtorrent import ShareWoodTorrent
+
 
 class ShareWoodTorrentScraper:
     """ Scrapes information of torrents from ShareWood.tv """
@@ -177,7 +179,7 @@ class ShareWoodTorrentScraper:
 
         return resolution.text if resolution else None
     
-    def _get_3d_flag(self, soup: BeautifulSoup) -> str:
+    def _get_three_d_flag(self, soup: BeautifulSoup) -> str:
         """ 
         Gets 3D flag of a torrent
         
@@ -188,9 +190,9 @@ class ShareWoodTorrentScraper:
             str: 3D flag of the torrent
         """
 
-        _3d_flag = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(12) > td:nth-child(2)")
+        three_d_flag = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(12) > td:nth-child(2)")
 
-        return _3d_flag.text if _3d_flag else None
+        return three_d_flag.text if three_d_flag else None
     
     def _get_hash(self, soup: BeautifulSoup) -> str:
         """ 
@@ -203,9 +205,9 @@ class ShareWoodTorrentScraper:
             str: Hash of the torrent
         """
 
-        hash = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(13) > td:nth-child(2)")
+        torrent_hash = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(13) > td:nth-child(2)")
 
-        return hash.text if hash else None
+        return torrent_hash.text if torrent_hash else None
     
     def _get_seeders(self, soup: BeautifulSoup) -> str:
         """ 
@@ -223,7 +225,7 @@ class ShareWoodTorrentScraper:
         return seeders.text if seeders else None
     
     def _get_leechers(self, soup: BeautifulSoup) -> str:
-        """ 
+        """
         Gets leechers of a torrent
         
         Args:
@@ -281,13 +283,8 @@ class ShareWoodTorrentScraper:
         torrent.tags = self._get_tags(soup)
         torrent.languages = self._get_languages(soup)
         torrent.resolution = self._get_resolution(soup)
-        torrent._3d_flag = self._get_3d_flag(soup)
+        torrent.three_d_flag = self._get_three_d_flag(soup)
         torrent.hash = self._get_hash(soup)
         torrent.seeders = self._get_seeders(soup)
         torrent.leechers = self._get_leechers(soup)
         torrent.completed = self._get_completed(soup)
-
-        
-
-        
-        

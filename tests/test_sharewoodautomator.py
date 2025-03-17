@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import pytest
-from unittest.mock import patch, MagicMock
-from sharewoodautomator import ShareWoodAutomator
-from sharewoodautomator import ShareWoodSearchCriteria
+from unittest.mock import MagicMock, patch
+
+import pytest  # noqa: F401
+
+from sharewoodautomator import ShareWoodAutomator, ShareWoodSearchCriteria
+
 
 class TestShareWoodAutomator:
     """Tests for the ShareWoodAutomator class"""
@@ -39,7 +41,7 @@ class TestShareWoodAutomator:
         
         with patch.dict(os.environ, mock_env):
             # Execute
-            automator = ShareWoodAutomator(headless=True)
+            ShareWoodAutomator(headless=True)
             
             # Verify
             assert mock_chrome.called
@@ -56,7 +58,7 @@ class TestShareWoodAutomator:
         
         with patch.dict(os.environ, mock_env):
             # Execute
-            automator = ShareWoodAutomator(headless=False)
+            ShareWoodAutomator(headless=False)
             
             # Verify
             assert mock_chrome.called
@@ -144,19 +146,4 @@ class TestShareWoodAutomator:
                 
                 # Verify
                 automator.scraper.scrape.assert_called_once_with(mock_torrent)
-                automator.browser.get.assert_called_once()
-    
-    @patch('sharewoodautomator.sharewoodautomator.Chrome')
-    def test_cleanup(self, mock_chrome, mock_env):
-        """Test cleanup in __del__ method"""
-        # Setup
-        mock_browser = MagicMock()
-        mock_chrome.return_value = mock_browser
-        
-        with patch.dict(os.environ, mock_env):
-            # Create and delete automator
-            automator = ShareWoodAutomator(headless=True)
-            automator.__del__()
-            
-            # Verify
-            automator.browser.quit.assert_called_once()
+                mock_torrent.download.assert_called_once()

@@ -2,15 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from dotenv import load_dotenv
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.webdriver import WebDriver
+from webdriver_manager.chrome import ChromeDriverManager
+
 from .sharewoodlogging import ShareWoodLogging
 from .sharewoodsearch import ShareWoodSearch
 from .sharewoodsearchcriteria import ShareWoodSearchCriteria
 from .sharewoodtorrent import ShareWoodTorrent
 from .sharewoodtorrentscraper import ShareWoodTorrentScraper
+
 
 class ShareWoodAutomator:
     """ Automates interactions with ShareWood.tv """
@@ -60,7 +64,7 @@ class ShareWoodAutomator:
             "PASSWORD": os.getenv("PASSWORD"),
         }
     
-    def _init_driver(self, headless: bool) -> None:
+    def _init_driver(self, headless: bool) -> WebDriver:
         """ 
         Initialize Chrome WebDriver with security optimizations
         Install Chrome WebDriver if not found
@@ -78,9 +82,10 @@ class ShareWoodAutomator:
         options.add_argument("--disable-dev-shm-usage") # Disable dev-shm usage
 
         # Initialize Chrome WebDriver
-        self.driver = Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-        self.driver.set_page_load_timeout(30)
-
+        driver = Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+        driver.set_page_load_timeout(30)
+        
+        return driver
 
     def connect(self) -> None:
         """
@@ -124,6 +129,3 @@ class ShareWoodAutomator:
 
         # Download torrent
         self.browser.get(ShareWoodTorrent.download_link)
-
-
-        

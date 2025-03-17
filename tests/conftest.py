@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 from selenium.webdriver import Chrome
+
 
 @pytest.fixture
 def mock_env():
@@ -21,6 +23,7 @@ def mock_env():
         "DOWNLOAD_PATH": "/tmp/sharewood_downloads"
     }
 
+
 @pytest.fixture
 def mock_chrome_driver():
     """Fixture to provide a mock Chrome WebDriver"""
@@ -31,11 +34,13 @@ def mock_chrome_driver():
     mock_driver.current_url = "https://www.sharewood.tv"
     return mock_driver
 
+
 @pytest.fixture
 def mock_load_dotenv():
     """Fixture to mock python-dotenv's load_dotenv function"""
     with patch('dotenv.load_dotenv') as mock:
         yield mock
+
 
 @pytest.fixture
 def ensure_test_dir():

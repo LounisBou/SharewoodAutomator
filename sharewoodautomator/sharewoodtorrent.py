@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-from urllib import request
 from dataclasses import dataclass, field
+from urllib import request
+
 
 @dataclass
 class ShareWoodTorrent:
@@ -99,7 +100,7 @@ class ShareWoodTorrent:
         default=None,
         metadata={"description": "Languages of the torrent"}
     )
-    _3d_flag: bool = field(
+    three_d_flag: bool = field(
         init=True,
         default=None,
         metadata={"description": "Flag indicating if torrent is 3D"}
@@ -108,6 +109,11 @@ class ShareWoodTorrent:
         init=True,
         default=None,
         metadata={"description": "Number of completed downloads"}
+    )
+    nb_comments: int = field(
+        init=True,
+        default=None,
+        metadata={"description": "Number of comments"}
     )
     download_link: str = field(
         init=True,
@@ -126,6 +132,7 @@ class ShareWoodTorrent:
     )
 
     def __repr__(self):
+        """ String representation of the torrent """
         return f"""
             Torrent {getattr(self, 'title', 'N/A')}
             -------------------
@@ -140,6 +147,7 @@ class ShareWoodTorrent:
         """
     
     def __str__(self):
+        """ String conversion of the torrent """
         return self.__repr__()
 
     def download(self, download_path: str = ".") -> None:
@@ -155,23 +163,25 @@ class ShareWoodTorrent:
 
         # Check if download link is available
         if not self.download_link:
-            raise Exception("No download link available")
+            raise ValueError("No download link available")
 
         # Check if download path exists
         if not os.path.exists(download_path):
             os.makedirs(download_path)
 
         # Download torrent file to download path
-        download_info = request.urlretrieve(self.download_link, f"{download_path}/{self.title}.torrent")
+        download_info = request.urlretrieve(
+            url=self.download_link, 
+            filename=f"{download_path}/{self.title}.torrent"
+        )
         
         # Check if download was successful
         if download_info:
             self.downloaded = True
             self.downloaded_path = download_info[0]
         else:
-            raise Exception("Failed to download torrent file")
-        
-
+            raise RuntimeError("Failed to download torrent file")
+    
     def delete(self) -> None:
         """
         Delete downloaded torrent file
@@ -188,4 +198,4 @@ class ShareWoodTorrent:
                 self.downloaded = False
                 self.downloaded_path = None
             else:
-                raise Exception("Downloaded torrent file not found")
+                raise FileNotFoundError("Downloaded torrent file not found")
