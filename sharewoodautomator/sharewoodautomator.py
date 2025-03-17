@@ -103,15 +103,18 @@ class ShareWoodAutomator:
         
         self.logging.disconnect()
     
-    def search(self, search_criteria: ShareWoodSearchCriteria) -> None:
+    def search(self, search_criteria: ShareWoodSearchCriteria) -> list[ShareWoodTorrent]:
         """
         Search for a torrent on ShareWood.tv
         
         Args:
-            query: Search query
+            search_criteria: Search criteria
+            
+        Returns:
+            list[ShareWoodTorrent]: List of torrents found
         """
 
-        self.searcher.search(search_criteria)
+        return self.searcher.search(search_criteria)
 
     def download(self, url: str) -> None:
         """
