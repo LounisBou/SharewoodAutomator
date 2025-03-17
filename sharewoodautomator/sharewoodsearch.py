@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import fields
-from typing import List
+from typing import List, Optional
 
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
@@ -17,7 +17,7 @@ from .sharewoodtorrent import ShareWoodTorrent
 class ShareWoodSearch():
     """Searches for torrents on ShareWood.tv"""
     
-    def __init__(self, browser: WebDriver, search_url: str, ignore_parsing_errors: bool = False):
+    def __init__(self, browser: WebDriver, search_url: str, ignore_parsing_errors: Optional[bool] = False):
         """
         Initialize a new session with ShareWood.tv
         
@@ -224,7 +224,7 @@ class ShareWoodSearch():
         # Return list of ShareWoodTorrent
         return torrents
 
-    def search(self, search_criteria: ShareWoodSearchCriteria) -> list:
+    def search(self, search_criteria: ShareWoodSearchCriteria) -> List[ShareWoodTorrent]:
         """
         Search for torrents on ShareWood.tv"
         
