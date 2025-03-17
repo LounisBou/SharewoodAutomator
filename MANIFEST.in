@@ -1,0 +1,34 @@
+# Include the README, LICENSE, and other important files
+include README.md
+include LICENSE
+include pyproject.toml
+include setup.py
+include setup.cfg
+include requirements.txt
+
+# Include the py.typed marker to indicate package supports type hints
+include sharewoodautomator/py.typed
+
+# Include all documentation
+recursive-include docs *.rst *.py *.bat *.txt *.conf
+
+# Include all example files
+recursive-include examples *.py
+
+# Include test files
+recursive-include tests *.py
+
+# Exclude development/build files
+global-exclude *.py[cod] __pycache__ *.so .DS_Store
+global-exclude *.egg-info* *.egg
+global-exclude .git*
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude .tox
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+
+# Exclude other unwanted files
+exclude .flake8
+exclude .pre-commit-config.yaml
+exclude tox.ini
