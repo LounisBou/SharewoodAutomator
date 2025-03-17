@@ -1,0 +1,2 @@
+[tool.pylint.messages_control]
+disable = "C0303,W0611,W0612"

@@ -3,13 +3,16 @@
 
 from dataclasses import fields
 from typing import List
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 from .sharewoodsearchcriteria import ShareWoodSearchCriteria
 from .sharewoodtorrent import ShareWoodTorrent
+
 
 class ShareWoodSearch():
     """Searches for torrents on ShareWood.tv"""
@@ -31,7 +34,7 @@ class ShareWoodSearch():
         # Ignore parsing errors
         self.ignore_parsing_errors = ignore_parsing_errors
 
-    def _fill_search_form_from_criteria(self, search_criteria: ShareWoodSearchCriteria) -> None:
+    def fill_search_form_from_criteria(self, search_criteria: ShareWoodSearchCriteria) -> None:
         """
         Fill search form from search criteria
         
@@ -97,9 +100,7 @@ class ShareWoodSearch():
                         # Find language checkbox and check it
                         search_form.find_element(By.NAME, language).click()
 
-
-    
-    def _apply_filters_from_criteria(self, search_criteria: ShareWoodSearchCriteria) -> str:
+    def apply_filters_from_criteria(self, search_criteria: ShareWoodSearchCriteria) -> str:
         """
         Apply filters from search criteria
 
@@ -133,8 +134,7 @@ class ShareWoodSearch():
             # Select quantity option by value
             quantity_select_input.select_by_value(search_criteria.quantity)
 
-
-    def _parse_search_result(self, html_search_result: str) -> List[ShareWoodTorrent]:
+    def parse_search_result(self, html_search_result: str) -> List[ShareWoodTorrent]:
         """
         Parse search results from ShareWood.tv using BeautifulSoup
         
@@ -180,8 +180,8 @@ class ShareWoodSearch():
         # Initialize list of ShareWoodTorrent
         torrents = []
 
-        # Iterate over torrents
-        for torrent in torrents:
+        # Iterate over a copy of torrents
+        for torrent in list(torrents):
             # Append parsed torrent to list of parsed torrents
             parsed_torrent = {
                 "url": torrent.find("a", name="torrent")["href"] if torrent.find("a", name="torrent") 
@@ -203,11 +203,20 @@ class ShareWoodSearch():
             }
 
             # Create ShareWoodTorrent instance
-            torrent = ShareWoodTorrent(**parsed_torrent)
+            torrent = ShareWoodTorrent(
+                url=parsed_torrent["url"],
+                title=parsed_torrent["title"],
+                age=parsed_torrent["age"],
+                size=parsed_torrent["size"],
+                nb_comments=parsed_torrent["comments"],
+                seeders=parsed_torrent["seeders"],
+                leechers=parsed_torrent["leechers"],
+                completed=parsed_torrent["downloads"]
+            )
 
             # Check if torrent parsed successfully
             if torrent.url is None and self.ignore_parsing_errors is False:
-                raise Exception("Failed to parse torrent")
+                raise ValueError("Failed to parse torrent")
             
             # Append torrent to list of torrents
             torrents.append(torrent)
@@ -215,9 +224,8 @@ class ShareWoodSearch():
         # Return list of ShareWoodTorrent
         return torrents
 
-
     def search(self, search_criteria: ShareWoodSearchCriteria) -> list:
-        """"
+        """
         Search for torrents on ShareWood.tv"
         
         Args:
@@ -236,10 +244,10 @@ class ShareWoodSearch():
         """
 
         # Fill search form from search criteria
-        self._fill_search_form_from_criteria(search_criteria)
+        self.fill_search_form_from_criteria(search_criteria)
 
         # Apply filters from search criteria
-        self._apply_filters_from_criteria(search_criteria)
+        self.apply_filters_from_criteria(search_criteria)
 
         # No need to submit form, search results are loaded dynamically
         # Wait for search results to load (div with id="result")
@@ -252,6 +260,3 @@ class ShareWoodSearch():
 
         # Return HTML of search results
         return result
-        
-
-        

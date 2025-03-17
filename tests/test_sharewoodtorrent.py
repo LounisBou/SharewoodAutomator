@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-import pytest
 from unittest.mock import patch
-from sharewoodautomator import ShareWoodTorrent
+
+import pytest
+
+from sharewoodautomator.sharewoodtorrent import ShareWoodTorrent
+
 
 class TestShareWoodTorrent:
     """Tests for the ShareWoodTorrent class"""

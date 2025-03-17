@@ -13,7 +13,7 @@ if __name__ == "__main__":
         ShareWoodSearchCriteria(
             query="The Shawshank Redemption",
             sorting="date",
-            order="desc",
+            direction="asc",
         )
     )
     
