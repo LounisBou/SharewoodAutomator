@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass, field
+from typing import Dict, Set
+
 
 @dataclass
 class ShareWoodSearchCriteria:
@@ -29,9 +31,9 @@ class ShareWoodSearchCriteria:
     )
     tags: str = field(
         default=None, 
-        metadata={"placeholder": "tags",}
+        metadata={"placeholder": "tags"}
     )
-    categories: dict = field(
+    categories: Dict[str, bool] = field(
         default={
             "Vidéos": False, 
             "Audios": False, 
@@ -42,7 +44,7 @@ class ShareWoodSearchCriteria:
         }, 
         metadata={"class": "category category-parent"}
     )
-    subcategories: dict = field(
+    subcategories: Dict[str, bool] = field(
         default={
             "Application Linux": False,
             "Application Mac": False,
@@ -52,7 +54,7 @@ class ShareWoodSearchCriteria:
         }, 
         metadata={"class": "subcategory"}
     )
-    languages: dict = field(
+    languages: Dict[str, bool] = field(
         default={
             "Français": False, 
             "Anglais": False, 
@@ -65,7 +67,7 @@ class ShareWoodSearchCriteria:
         },
         metadata={"class": "subcategory"}
     )
-    type: dict = field(
+    type: Dict[str, bool] = field(
         default={
             "stream": False, 
             "sd": False,
@@ -76,28 +78,27 @@ class ShareWoodSearchCriteria:
         },
         metadata={"class": "subcategory"}
     )
-    sorting_values: set = field(
+    sorting_values: Set[str] = field(
         default={'created_at', 'name', 'seeders', 'leechers', 'times_Completed', 'Size'},
         metadata={"id": "sorting", "name": "sorting", "class": "form-control"}
     )
-    sorting: str = field(
+    sorting: Set[str] = field(
         default=None, # Default will be "created_at"
         metadata={"id": "sort", "name": "sort", "class": "form-control"}
     )
-    direction_values: set = field(
+    direction_values: Set[str] = field(
         default={"asc", "desc"},
         metadata={"id": "direction", "name": "direction", "class": "form-control"}
     )
-    direction: str = field(
+    direction: Set[str] = field(
         default=None, # Default will be "desc"
         metadata={"id": "direction", "name": "direction", "class": "form-control"}
     )
-    quantity_values: set = field(
+    quantity_values: Set[int] = field(
         default={25, 50, 100},
         metadata={"id": "qty", "name": "qty", "class": "form-control"}
     )
-    quantity: int = field(
+    quantity: Set[int] = field(
         default=None, # Default will be 25
         metadata={"id": "qty", "name": "qty", "class": "form-control"}
     )
-

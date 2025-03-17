@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
 from selenium.webdriver import Chrome, ChromeOptions
@@ -19,7 +20,7 @@ from .sharewoodtorrentscraper import ShareWoodTorrentScraper
 class ShareWoodAutomator:
     """ Automates interactions with ShareWood.tv """
 
-    def __init__(self, headless: bool = True) -> None:
+    def __init__(self, headless: Optional[bool] = True) -> None:
         """
         Initialize a new ShareWood.tv automator
 
@@ -46,7 +47,7 @@ class ShareWoodAutomator:
         # Close browser window
         self.browser.quit()
     
-    def _load_env(self) -> dict:
+    def _load_env(self) -> Dict[str, str]:
         """
         Load environment variables from .env file
         """
@@ -103,7 +104,7 @@ class ShareWoodAutomator:
         
         self.logging.disconnect()
     
-    def search(self, search_criteria: ShareWoodSearchCriteria) -> list[ShareWoodTorrent]:
+    def search(self, search_criteria: ShareWoodSearchCriteria) -> List[ShareWoodTorrent]:
         """
         Search for a torrent on ShareWood.tv
         
