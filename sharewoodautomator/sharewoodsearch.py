@@ -17,13 +17,14 @@ from .sharewoodtorrent import ShareWoodTorrent
 class ShareWoodSearch():
     """Searches for torrents on ShareWood.tv"""
     
-    def __init__(self, browser: WebDriver, search_url: str, ignore_parsing_errors: Optional[bool] = False):
+    def __init__(self, browser: WebDriver, search_url: str, timeout: int, ignore_parsing_errors: Optional[bool] = False) -> None:
         """
         Initialize a new session with ShareWood.tv
         
         Args:
             browser: Selenium WebDriver instance
             search_url: URL of ShareWood.tv search page
+            timeout: Timeout for WebDriverWait
             ignore_parsing_errors: Ignore parsing errors (default: False)
         """
         
@@ -33,6 +34,8 @@ class ShareWoodSearch():
         self.search_url = search_url
         # Ignore parsing errors
         self.ignore_parsing_errors = ignore_parsing_errors
+        # Timeout for WebDriverWait
+        self.timeout = timeout
 
     def fill_search_form_from_criteria(self, search_criteria: ShareWoodSearchCriteria) -> None:
         """
@@ -46,7 +49,7 @@ class ShareWoodSearch():
         self.browser.get(self.search_url)
 
         # Wait for form to load (form with action="TorrentController@torrents")
-        search_form = WebDriverWait(self.browser, 10).until(
+        search_form = WebDriverWait(self.browser, self.timeout).until(
             EC.presence_of_element_located((By.XPATH, "//form[@action='TorrentController@torrents']"))
         )
 
@@ -109,7 +112,7 @@ class ShareWoodSearch():
         """
 
         # Wait for form to load (form with action="TorrentController@torrents")
-        search_form = WebDriverWait(self.browser, 10).until(
+        search_form = WebDriverWait(self.browser, self.timeout).until(
             EC.presence_of_element_located((By.XPATH, "//form[@action='TorrentController@torrents']"))
         )
 
@@ -251,7 +254,7 @@ class ShareWoodSearch():
 
         # No need to submit form, search results are loaded dynamically
         # Wait for search results to load (div with id="result")
-        search_results = WebDriverWait(self.browser, 10).until(
+        search_results = WebDriverWait(self.browser, self.timeout).until(
             EC.presence_of_element_located((By.ID, "result"))
         )
 

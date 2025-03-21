@@ -28,16 +28,30 @@ class ShareWoodAutomator:
             headless: Run browser in headless mode
         """
 
-        # Create selenium driver instance
-        self.browser = self._init_driver(headless)
         # Load environment variables
         self.env = self._load_env()
+        
+        # Create selenium driver instance
+        self.browser = self._init_driver(
+            headless, 
+            timeout=self.env["BROWSER_TIMEOUT"]
+        )
         # ShareWood logging
-        self.logging = ShareWoodLogging(self.browser, self.env["SHAREWOOD_LOGIN_URL"], self.env["SHAREWOOD_LOGOUT_URL"])
+        self.logging = ShareWoodLogging(
+            browser=self.browser, 
+            home_url=self.env["SHAREWOOD_URL"],
+            login_url=self.env["SHAREWOOD_LOGIN_URL"], 
+            logout_url=self.env["SHAREWOOD_LOGOUT_URL"], 
+            timeout=self.env["BROWSER_WAIT_TIMEOUT"]
+        )
         # ShareWood search
-        self.searcher = ShareWoodSearch(self.browser, self.env["SHAREWOOD_TORRENTS_URL"])
+        self.searcher = ShareWoodSearch(
+            browser=self.browser, 
+            search_url=self.env["SHAREWOOD_TORRENTS_URL"], 
+            timeout=self.env["BROWSER_WAIT_TIMEOUT"]
+        )
         # ShareWood torrents scraper
-        self.scraper = ShareWoodTorrentScraper(self.browser)
+        self.scraper = ShareWoodTorrentScraper(browser=self.browser)
     
     def __del__(self) -> None:
         """
@@ -61,6 +75,8 @@ class ShareWoodAutomator:
             "SHAREWOOD_LOGIN_URL": os.getenv("SHAREWOOD_LOGIN_URL"),
             "SHAREWOOD_LOGOUT_URL": os.getenv("SHAREWOOD_LOGOUT_URL"),
             "SHAREWOOD_TORRENTS_URL": os.getenv("SHAREWOOD_TORRENTS_URL"),
+            "BROWSER_TIMEOUT": int(os.getenv("BROWSER_TIMEOUT", "10")),
+            "BROWSER_WAIT_TIMEOUT": int(os.getenv("BROWSER_WAIT_TIMEOUT", "10")),
             "PSEUDO": os.getenv("PSEUDO"),
             "PASSWORD": os.getenv("PASSWORD"),
         }
@@ -71,13 +87,18 @@ class ShareWoodAutomator:
                 raise ValueError(f"Missing environment variable: {key}")
         return env_vars
     
-    def _init_driver(self, headless: bool) -> WebDriver:
+    def _init_driver(self, headless: bool, timeout: int) -> WebDriver:
         """ 
         Initialize Chrome WebDriver with security optimizations
         Install Chrome WebDriver if not found
 
         Args:
             headless: Run browser in headless mode
+            timeout: Timeout for WebDriverWait
+        Returns:
+            WebDriver: Chrome WebDriver instance
+        Raises:
+            Exception: If Chrome WebDriver cannot be installed
         """
 
         # Configure Chrome WebDriver with security optimizations
@@ -90,7 +111,12 @@ class ShareWoodAutomator:
 
         # Initialize Chrome WebDriver
         driver = Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-        driver.set_page_load_timeout(30)
+        # Set default timeout for WebDriver
+        driver.implicitly_wait(timeout)
+        # Set default page load timeout for WebDriver
+        driver.set_page_load_timeout(timeout)
+        # Set default script timeout for WebDriver
+        driver.set_script_timeout(timeout)
         
         return driver
 

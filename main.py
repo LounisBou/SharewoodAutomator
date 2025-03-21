@@ -7,6 +7,9 @@ from sharewoodautomator import ShareWoodAutomator, ShareWoodSearchCriteria
 if __name__ == "__main__":
     # Create ShareWood.tv automator instance
     automator = ShareWoodAutomator(headless=False)
+    
+    # Perform login
+    automator.connect()
 
     # Perform search on ShareWood.tv
     automator.search(
