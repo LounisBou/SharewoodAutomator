@@ -67,58 +67,35 @@ class ShareWoodSearch():
 
             # Check if query is provided
             if search_criteria.query:
-                # Get input name from metadata
-                query_input_name = search_criteria.get_field_metadata_attribute("query", "name")
                 # Find search input and enter search query
-                search_form.find_element(By.NAME, query_input_name).send_keys(search_criteria.query)
+                search_form.find_element(
+                    by=By.NAME,
+                    value=search_criteria.get_css_selector("query")
+                ).send_keys(search_criteria.query)
 
             # Check if description is provided
             if search_criteria.description:
-                # Get input name from metadata
-                description_input_name = search_criteria.get_field_metadata_attribute("description", "name")
                 # Find description input and enter description
-                search_form.find_element(By.NAME, description_input_name).send_keys(search_criteria.description)
+                search_form.find_element(
+                    by=By.CSS_SELECTOR,
+                    value=search_criteria.get_css_selector("description")
+                ).send_keys(search_criteria.description)
 
             # Check if uploader is provided
             if search_criteria.uploader:
-                # Get input name from metadata
-                uploader_input_name = search_criteria.get_field_metadata_attribute("uploader", "name")
                 # Find uploader input and enter uploader
-                search_form.find_element(By.NAME, uploader_input_name).send_keys(search_criteria.uploader)
+                search_form.find_element(
+                    by=By.CSS_SELECTOR,
+                    value=search_criteria.get_css_selector("uploader")
+                ).send_keys(search_criteria.uploader)
 
             # Check if tags are provided
             if search_criteria.tags:
-                # Get input name from metadata
-                tags_input_name = search_criteria.get_field_metadata_attribute("tags", "name")
                 # Find tags input and enter tags
-                search_form.find_element(By.NAME, tags_input_name).send_keys(search_criteria.tags)
-
-            # Check if categories are provided
-            if search_criteria.categories:
-                # Iterate over categories
-                for category, checked in search_criteria.categories.items():
-                    # Check if category is checked
-                    if checked:
-                        # Find category checkbox and check it
-                        search_form.find_element(By.NAME, category).click()
-
-            # Check if subcategories are provided
-            if search_criteria.subcategories:
-                # Iterate over subcategories
-                for subcategory, checked in search_criteria.subcategories.items():
-                    # Check if subcategory is checked
-                    if checked:
-                        # Find subcategory checkbox and check it
-                        search_form.find_element(By.NAME, subcategory).click()
-
-            # Check if languages are provided
-            if search_criteria.languages:
-                # Iterate over languages
-                for language, checked in search_criteria.languages.items():
-                    # Check if language is checked
-                    if checked:
-                        # Find language checkbox and check it
-                        search_form.find_element(By.NAME, language).click()
+                search_form.find_element(
+                    by=By.NAME,
+                    value=search_criteria.get_css_selector("tags")
+                ).send_keys(search_criteria.tags)
 
         else:
             raise ValueError("Search form is not loaded or not displayed")

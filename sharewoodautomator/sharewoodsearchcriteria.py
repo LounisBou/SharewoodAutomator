@@ -4,6 +4,8 @@
 from dataclasses import dataclass, field, fields
 from typing import Dict, Optional, Set
 
+from sharewoodautomator.sharewoodselectors import SEARCH_CRITERIA_SELECTORS
+
 
 @dataclass
 class ShareWoodSearchCriteria:
@@ -12,26 +14,26 @@ class ShareWoodSearchCriteria:
     query: Optional[str] = field(
         default=None,
         metadata={
-            "id": "search",
-            "name": "research",
-            "placeholder": "Nom / Titre",
+            "css_selector": SEARCH_CRITERIA_SELECTORS["query"],
         }
     )
     description: Optional[str] = field(
         default=None,
         metadata={
-            "id": "description",
-            "name": "description",
-            "placeholder": "Acteur, Réalisateur, Langue, ..."
+            "css_selector": SEARCH_CRITERIA_SELECTORS["description"],
         }
     )
     uploader: Optional[str] = field(
         default=None,
-        metadata={"placeholder": "Nom de l'uploader"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["uploader"],
+        }
     )
     tags: Optional[str] = field(
         default=None,
-        metadata={"placeholder": "tags"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["tags"],
+        }
     )
     categories: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -42,7 +44,9 @@ class ShareWoodSearchCriteria:
             "Jeux-Vidéos": False,
             "Formations": False,
         },
-        metadata={"class": "category category-parent"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["categories"]
+        }
     )
     subcategories: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -52,7 +56,9 @@ class ShareWoodSearchCriteria:
             "Application Windows": False,
             "GPS": False,
         },
-        metadata={"class": "subcategory"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["subcategories"]
+        }
     )
     languages: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -65,7 +71,9 @@ class ShareWoodSearchCriteria:
             "Allemand": False,
             "Autre": False,
         },
-        metadata={"class": "subcategory"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["languages"]
+        }
     )
     types: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -76,34 +84,39 @@ class ShareWoodSearchCriteria:
             "internal": False,
             "downloaded": False,
         },
-        metadata={"class": "subcategory"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["types"]
+        }
     )
     sorting_values: Optional[Set[str]] = field(
         default_factory=lambda: {'created_at', 'name', 'seeders', 'leechers', 'times_Completed', 'Size'},
-        metadata={"id": "sorting", "name": "sorting", "class": "form-control"}
     )
     sorting: Optional[str] = field(
         default=None,
-        metadata={"id": "sort", "name": "sort", "class": "form-control"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["sorting"],
+        }
     )
     direction_values: Optional[Set[str]] = field(
         default_factory=lambda: {"asc", "desc"},
-        metadata={"id": "direction", "name": "direction", "class": "form-control"}
     )
     direction: Optional[str] = field(
         default=None,
-        metadata={"id": "direction", "name": "direction", "class": "form-control"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["direction"],
+        }
     )
     quantity_values: Optional[Set[int]] = field(
         default_factory=lambda: {25, 50, 100},
-        metadata={"id": "qty", "name": "qty", "class": "form-control"}
     )
     quantity: Optional[int] = field(
         default=None,
-        metadata={"id": "qty", "name": "qty", "class": "form-control"}
+        metadata={
+            "css_selector": SEARCH_CRITERIA_SELECTORS["quantity"],
+        }
     )
 
-    def get_field_metadata(self, field_name: str) -> Optional[Dict[str, str]]:
+    def _get_field_metadata(self, field_name: str) -> Optional[Dict[str, str]]:
         """
         Get the metadata for a specific field
 
@@ -120,7 +133,7 @@ class ShareWoodSearchCriteria:
             return {key: value for key, value in metadata.items() if key != "class"}
         return None
 
-    def get_field_metadata_attribute(self, field_name: str, attribute: str) -> Optional[str]:
+    def _get_field_metadata_attribute(self, field_name: str, attribute: str) -> Optional[str]:
         """
         Get a specific attribute from the metadata of a field
 
@@ -132,8 +145,21 @@ class ShareWoodSearchCriteria:
         Raises:
             ValueError: If the field name is not found in the dataclass
         """
-        metadata = self.get_field_metadata(field_name)
+        metadata = self._get_field_metadata(field_name)
 
         if metadata is not None and attribute in metadata:
             return metadata[attribute]
         return None
+
+    def get_css_selector(self, field_name: str) -> Optional[str]:
+        """
+        Get the CSS selector for a specific field
+
+        Args:
+            field_name: Name of the field to get the CSS selector for
+        Returns:
+            CSS selector string, or None if not found
+        Raises:
+            ValueError: If the field name is not found in the dataclass
+        """
+        return self._get_field_metadata_attribute(field_name, "css_selector")
