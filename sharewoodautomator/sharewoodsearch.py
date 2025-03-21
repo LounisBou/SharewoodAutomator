@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from dataclasses import fields
 from typing import List, Optional
 
 from bs4 import BeautifulSoup
@@ -11,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .sharewoodsearchcriteria import ShareWoodSearchCriteria
+from .sharewoodselectors import PAGE_CONTROLS_SELECTORS
 from .sharewoodtorrent import ShareWoodTorrent
 
 
@@ -51,13 +51,13 @@ class ShareWoodSearch():
 
         # Wait for page to load
         WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.XPATH, "//div[@id='result']"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents"]))
         )
         print(" - Torrent page is loaded")
 
-        # Wait for form to load (form with action="TorrentController@torrents")
+        # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.XPATH, "//form[@action='TorrentController@torrents']"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
         )
 
         # Check if search box is visible
@@ -93,7 +93,7 @@ class ShareWoodSearch():
             if search_criteria.tags:
                 # Find tags input and enter tags
                 search_form.find_element(
-                    by=By.NAME,
+                    by=By.CSS_SELECTOR,
                     value=search_criteria.get_css_selector("tags")
                 ).send_keys(search_criteria.tags)
 
@@ -108,29 +108,29 @@ class ShareWoodSearch():
             search_criteria: Search criteria for ShareWood.tv
         """
 
-        # Wait for form to load (form with action="TorrentController@torrents")
+        # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.XPATH, "//form[@action='TorrentController@torrents']"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
         )
 
         # Check if sorting is provided
         if search_criteria.sorting:
             # Find sorting select element by name
-            sorting_select_input = search_form.find_element(By.NAME, fields(search_criteria.sorting)[0].metadata['name'])
+            sorting_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("sorting"))
             # Select sorting option by value
             sorting_select_input.select_by_value(search_criteria.sorting)
 
         # Check if direction is provided
         if search_criteria.direction:
             # Find direction select element by name
-            direction_select_input = search_form.find_element(By.NAME, fields(search_criteria.direction)[0].metadata['name'])
+            direction_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("direction"))
             # Select direction option by value
             direction_select_input.select_by_value(search_criteria.direction)
 
         # Check if quantity is provided
         if search_criteria.quantity:
             # Find quantity select element by name
-            quantity_select_input = search_form.find_element(By.NAME, fields(search_criteria.quantity)[0].metadata['name'])
+            quantity_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("quantity"))
             # Select quantity option by value
             quantity_select_input.select_by_value(search_criteria.quantity)
 
@@ -252,7 +252,7 @@ class ShareWoodSearch():
         # No need to submit form, search results are loaded dynamically
         # Wait for search results to load (div with id="result")
         search_results = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.ID, "result"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents"]))
         )
 
         # Get HTML of search results (div with id="result")

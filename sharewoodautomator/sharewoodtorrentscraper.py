@@ -2,262 +2,69 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
+from .sharewoodselectors import TORRENT_SELECTORS
 from .sharewoodtorrent import ShareWoodTorrent
 
 
 class ShareWoodTorrentScraper:
     """ Scrapes information of torrents from ShareWood.tv """
 
-    def __init__(self, browser):
-        """ Initializes ShareWoodTorrentScraper """
+    def __init__(self, browser, timeout: int) -> None:
+        """
+        Initializes ShareWoodTorrentScraper
+
+        Args:
+            browser: selenium WebDriver instance
+            timeout: Timeout for WebDriverWait
+        """
 
         self.browser = browser
+        self.timeout = timeout
+        self.html = None
+        self.soup = None
 
-    def _get_discounts(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets discounts value of a torrent
-        
+    def _get_attribut_by_css_selector(self, attribut_name: str) -> str:
+        """
+        Gets title of a torrent
+
         Args:
-            soup: BeautifulSoup instance of the torrent page
-        
+            attribut_name: ShareWoodTorrent attribute name
         Returns:
-            str: Discounts value
+            str: Title of the torrent
         """
 
-        discounts = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2) > span > i")
+        # Check if soup is None
+        if self.soup is None:
+            raise ValueError("HTML content not loaded. Please call scrape() first.")
 
-        return discounts.text if discounts else None
-    
-    def _get_fastline_credit_url(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets use fastline credit url of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Use fastline credit url
-        """
+        # Check if css selector exists
+        if attribut_name not in TORRENT_SELECTORS:
+            raise ValueError(f"Invalid attribute name: {attribut_name}")
 
-        use_fastline_credit = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(2) > td:nth-child(2) > a['href']")
+        try:
+            # Get the title using the CSS selector
+            attribut = self.soup.select_one(TORRENT_SELECTORS[attribut_name])
+        except Exception as e:
+            # Handle any exceptions that occur during selection
+            raise ValueError(f"Error while selecting {attribut_name}: {e}") from e
 
-        return use_fastline_credit.text if use_fastline_credit else None
-    
-    def _get_uploader_profile(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets URL of the uploader profile of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: URL of the uploader profile
-        """
+        # Check if the element was found
+        if not attribut:
+            raise ValueError(f"Element not found for {attribut_name}")
 
-        uploader_profile = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > a['href']")
-
-        return uploader_profile.text if uploader_profile else None
-    
-    def _get_age(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets age of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Age of the torrent
-        """
-
-        age = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(4) > td:nth-child(2)")
-
-        return age.text if age else None
-    
-    def _get_size(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets size of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Size of the torrent
-        """
-
-        size = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(5) > td:nth-child(2)")
-
-        return size.text if size else None
-    
-    def _get_ratio(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets estimated ratio of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Estimated ratio of the torrent
-        """
-
-        ratio = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(6) > td:nth-child(2)")
-
-        return ratio.text if ratio else None
-    
-    def _get_category(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets category of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Category of the torrent
-        """
-
-        category = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(7) > td:nth-child(2)")
-
-        return category.text if category else None
-    
-    def _get_subcategory(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets subcategory of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Subcategory of the torrent
-        """
-
-        subcategory = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(8) > td:nth-child(2)")
-
-        return subcategory.text if subcategory else None
-    
-    def _get_tags(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets tags of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Tags of the torrent
-        """
-
-        tags = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(9) > td:nth-child(2)")
-
-        return tags.text if tags else None
-    
-    def _get_languages(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets languages of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Languages of the torrent
-        """
-
-        languages = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(10) > td:nth-child(2)")
-
-        return languages.text if languages else None
-    
-    def _get_resolution(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets resolution of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Resolution of the torrent
-        """
-
-        resolution = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(11) > td:nth-child(2)")
-
-        return resolution.text if resolution else None
-    
-    def _get_three_d_flag(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets 3D flag of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: 3D flag of the torrent
-        """
-
-        three_d_flag = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(12) > td:nth-child(2)")
-
-        return three_d_flag.text if three_d_flag else None
-    
-    def _get_hash(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets hash of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Hash of the torrent
-        """
-
-        torrent_hash = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(13) > td:nth-child(2)")
-
-        return torrent_hash.text if torrent_hash else None
-    
-    def _get_seeders(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets seeders of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Seeders of the torrent
-        """
-
-        seeders = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(14) > td:nth-child(2) > span.badge-extra.text-green")
-
-        return seeders.text if seeders else None
-    
-    def _get_leechers(self, soup: BeautifulSoup) -> str:
-        """
-        Gets leechers of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Leechers of the torrent
-        """
-
-        leechers = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(15) > td:nth-child(2) > span.badge-extra.text-red")
-
-        return leechers.text if leechers else None
-    
-    def _get_completed(self, soup: BeautifulSoup) -> str:
-        """ 
-        Gets completed of a torrent
-        
-        Args:
-            soup: BeautifulSoup instance of the torrent page
-        
-        Returns:
-            str: Completed of the torrent
-        """
-
-        completed = soup.select_one("#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(16) > td:nth-child(2) > span.badge-extra.text-info")
-
-        return completed.text if completed else None
+        # Return the text content of the element
+        # and strip any leading/trailing whitespace
+        # and remove any HTML tags
+        return attribut.get_text(strip=True)
 
     def scrape(self, torrent: ShareWoodTorrent) -> None:
-        """ 
+        """
         Scrapes information of torrents from ShareWood.tv
-        
+
         Args:
             torrent: ShareWoodTorrent to scrape information from
         """
@@ -265,26 +72,36 @@ class ShareWoodTorrentScraper:
         # Open torrent page
         self.browser.get(torrent.href)
 
+        # Wait for the page to load
+        WebDriverWait(self.browser, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, TORRENT_SELECTORS["title"]))
+        )
+
         # Get page HTML content
-        html = self.browser.page_source
+        self.html = self.browser.page_source
 
         # Parse HTML content using BeautifulSoup
-        soup = BeautifulSoup(html, "html.parser")
+        self.soup = BeautifulSoup(self.html, "html.parser")
 
         # Scrape torrent information
-        torrent.discounts = self._get_discounts(soup)
-        torrent.fastline_credit_url = self._get_fastline_credit_url(soup)
-        torrent.uploader_profile = self._get_uploader_profile(soup)
-        torrent.age = self._get_age(soup)
-        torrent.size = self._get_size(soup)
-        torrent.ratio = self._get_ratio(soup)
-        torrent.category = self._get_category(soup)
-        torrent.subcategory = self._get_subcategory(soup)
-        torrent.tags = self._get_tags(soup)
-        torrent.languages = self._get_languages(soup)
-        torrent.resolution = self._get_resolution(soup)
-        torrent.three_d_flag = self._get_three_d_flag(soup)
-        torrent.hash = self._get_hash(soup)
-        torrent.seeders = self._get_seeders(soup)
-        torrent.leechers = self._get_leechers(soup)
-        torrent.completed = self._get_completed(soup)
+        torrent.title = self._get_attribut_by_css_selector("title")
+        torrent.description = self._get_attribut_by_css_selector("description")
+        torrent.hash = self._get_attribut_by_css_selector("hash")
+        torrent.uploader = self._get_attribut_by_css_selector("uploader")
+        torrent.uploader_profile = self._get_attribut_by_css_selector("uploader_profile")
+        torrent.size = self._get_attribut_by_css_selector("size")
+        torrent.age = self._get_attribut_by_css_selector("age")
+        torrent.ratio = self._get_attribut_by_css_selector("ratio")
+        torrent.tags = self._get_attribut_by_css_selector("tags")
+        torrent.resolution = self._get_attribut_by_css_selector("resolution")
+        torrent.seeders = self._get_attribut_by_css_selector("seeders")
+        torrent.leechers = self._get_attribut_by_css_selector("leechers")
+        torrent.discounts = self._get_attribut_by_css_selector("discounts")
+        torrent.fastline_credit_url = self._get_attribut_by_css_selector("fastline_credit_url")
+        torrent.category = self._get_attribut_by_css_selector("category")
+        torrent.subcategory = self._get_attribut_by_css_selector("subcategory")
+        torrent.languages = self._get_attribut_by_css_selector("languages")
+        torrent.three_d_flag = self._get_attribut_by_css_selector("three_d_flag")
+        torrent.completed = self._get_attribut_by_css_selector("completed")
+        torrent.nb_comments = self._get_attribut_by_css_selector("nb_comments")
+        torrent.download_link = self._get_attribut_by_css_selector("download_link")
