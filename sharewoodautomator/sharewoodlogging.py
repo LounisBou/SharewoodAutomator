@@ -16,14 +16,7 @@ from sharewoodautomator.sharewoodselectors import (
 class ShareWoodLogging:
     """Centralized logging facility for ShareWood.tv"""
 
-    def __init__(
-        self,
-        browser: WebDriver,
-        home_url: str,
-        login_url: str,
-        logout_url: str,
-        timeout: int
-    ) -> None:
+    def __init__(self, browser: WebDriver, home_url: str, login_url: str, logout_url: str, timeout: int) -> None:
         """
         ShareWood.tv logging manager
 
@@ -65,19 +58,16 @@ class ShareWoodLogging:
 
             # - Username
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, LOGIN_SELECTORS["username_input"])
-                )
+                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["username_input"]))
             )
             self.browser.find_element(
-                by=By.CSS_SELECTOR, value=LOGIN_SELECTORS["username_input"]
+                by=By.CSS_SELECTOR,
+                value=LOGIN_SELECTORS["username_input"]
             ).send_keys(pseudo)
 
             # - Password
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, LOGIN_SELECTORS["password_input"])
-                )
+                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["password_input"]))
             )
             self.browser.find_element(
                 by=By.CSS_SELECTOR,
@@ -86,19 +76,16 @@ class ShareWoodLogging:
 
             # Click on the login button
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, LOGIN_SELECTORS["login_button"])
-                )
+                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["login_button"]))
             )
             self.browser.find_element(
-                by=By.CSS_SELECTOR, value=LOGIN_SELECTORS["login_button"]
+                by=By.CSS_SELECTOR,
+                value=LOGIN_SELECTORS["login_button"]
             ).click()
 
             # Wait for the home page to load completely
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, "#frame > .content > .messages")
-                )
+                EC.visibility_of_element_located((By.CSS_SELECTOR, "#frame > .content > .messages"))
             )
 
             # Search for cookie button and click it if present

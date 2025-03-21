@@ -13,27 +13,19 @@ class ShareWoodSearchCriteria:
 
     query: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["query"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["query"]}
     )
     description: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["description"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["description"]}
     )
     uploader: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["uploader"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["uploader"]}
     )
     tags: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["tags"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["tags"]}
     )
     categories: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -44,9 +36,7 @@ class ShareWoodSearchCriteria:
             "Jeux-Vidéos": False,
             "Formations": False,
         },
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["categories"]
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["categories"]}
     )
     subcategories: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -56,9 +46,7 @@ class ShareWoodSearchCriteria:
             "Application Windows": False,
             "GPS": False,
         },
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["subcategories"]
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["subcategories"]}
     )
     languages: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -71,9 +59,7 @@ class ShareWoodSearchCriteria:
             "Allemand": False,
             "Autre": False,
         },
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["languages"]
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["languages"]}
     )
     types: Optional[Dict[str, bool]] = field(
         default_factory=lambda: {
@@ -84,36 +70,35 @@ class ShareWoodSearchCriteria:
             "internal": False,
             "downloaded": False,
         },
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["types"]
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["types"]}
     )
     sorting_values: Optional[Set[str]] = field(
-        default_factory=lambda: {'created_at', 'name', 'seeders', 'leechers', 'times_Completed', 'Size'},
+        default_factory=lambda: {
+            'created_at',
+            'name',
+            'seeders',
+            'leechers',
+            'times_Completed',
+            'Size',
+        },
     )
     sorting: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["sorting"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["sorting"]}
     )
     direction_values: Optional[Set[str]] = field(
         default_factory=lambda: {"asc", "desc"},
     )
     direction: Optional[str] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["direction"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["direction"]}
     )
     quantity_values: Optional[Set[int]] = field(
         default_factory=lambda: {25, 50, 100},
     )
     quantity: Optional[int] = field(
         default=None,
-        metadata={
-            "css_selector": SEARCH_CRITERIA_SELECTORS["quantity"],
-        }
+        metadata={"css_selector": SEARCH_CRITERIA_SELECTORS["quantity"]}
     )
 
     def _get_field_metadata(self, field_name: str) -> Optional[Dict[str, str]]:

@@ -18,13 +18,7 @@ from .sharewoodtorrent import ShareWoodTorrent
 class ShareWoodSearch():
     """Searches for torrents on ShareWood.tv"""
 
-    def __init__(
-        self,
-        browser: WebDriver,
-        search_url: str,
-        timeout: int,
-        ignore_parsing_errors: Optional[bool] = False
-    ) -> None:
+    def __init__(self, browser: WebDriver, search_url: str, timeout: int, ignore_parsing_errors: Optional[bool] = False) -> None:
         """
         Initialize a new session with ShareWood.tv
 
@@ -64,9 +58,7 @@ class ShareWoodSearch():
 
         # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"])
-            )
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
         )
 
         # Check if search box is visible
@@ -131,9 +123,7 @@ class ShareWoodSearch():
 
         # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"])
-            )
+            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
         )
 
         # Check if sorting is provided
@@ -193,48 +183,25 @@ class ShareWoodSearch():
         for torrent_element in list(torrent_elements):
             # Append parsed torrent to list of parsed torrents
             parsed_torrent_element = {
-                "url": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["url"]
-                ),
-                "title": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["title"]
-                ),
-                "age": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["age"]
-                ),
-                "size": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["size"]
-                ),
-                "comments": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["comments"]
-                ),
-                "seeders": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["seeders"]
-                ),
-                "leechers": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["leechers"]
-                ),
-                "downloads": torrent_element.select_one(
-                    selector=TORRENT_RESULTS_SELECTORS["downloads"]
-                )
+                "url": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["url"]),
+                "title": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["title"]),
+                "age": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["age"]),
+                "size": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["size"]),
+                "comments": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["comments"]),
+                "seeders": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["seeders"]),
+                "leechers": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["leechers"]),
+                "downloads": torrent_element.select_one(TORRENT_RESULTS_SELECTORS["downloads"])
             }
 
             # Create ShareWoodTorrent instance
             torrent = ShareWoodTorrent(
-                url=parsed_torrent_element["url"].get("href")
-                if parsed_torrent_element["url"] else None,
-                title=parsed_torrent_element["title"].get_text(strip=True)
-                if parsed_torrent_element["title"] else None,
-                age=parsed_torrent_element["age"].get_text(strip=True)
-                if parsed_torrent_element["age"] else None,
-                size=parsed_torrent_element["size"] .get_text(strip=True)
-                if parsed_torrent_element["size"] else None,
-                nb_comments=parsed_torrent_element["comments"].get_text(strip=True)
-                if parsed_torrent_element["comments"] else None,
-                leechers=parsed_torrent_element["leechers"].get_text(strip=True)
-                if parsed_torrent_element["leechers"] else None,
-                completed=parsed_torrent_element["downloads"].get_text(strip=True)
-                if parsed_torrent_element["downloads"] else None,
+                url=parsed_torrent_element["url"].get("href") if parsed_torrent_element["url"] else None,
+                title=parsed_torrent_element["title"].get_text(strip=True) if parsed_torrent_element["title"] else None,
+                age=parsed_torrent_element["age"].get_text(strip=True) if parsed_torrent_element["age"] else None,
+                size=parsed_torrent_element["size"] .get_text(strip=True) if parsed_torrent_element["size"] else None,
+                nb_comments=parsed_torrent_element["comments"].get_text(strip=True) if parsed_torrent_element["comments"] else None,
+                leechers=parsed_torrent_element["leechers"].get_text(strip=True) if parsed_torrent_element["leechers"] else None,
+                completed=parsed_torrent_element["downloads"].get_text(strip=True) if parsed_torrent_element["downloads"] else None,
             )
 
             # Check if torrent parsed successfully
