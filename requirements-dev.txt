@@ -1,0 +1,32 @@
+# Core dependencies (from requirements.txt)
+selenium>=4.0.0
+beautifulsoup4>=4.10.0
+python-dotenv>=0.19.0
+lxml>=4.6.0
+urllib3>=1.26.0
+webdriver-manager>=3.5.0
+
+# Testing
+pytest>=6.0.0
+pytest-cov>=2.12.0
+pytest-mock>=3.6.0
+
+# Linting and formatting
+flake8>=3.9.0
+flake8-docstrings>=1.6.0
+black>=21.5b2
+isort>=5.9.0
+mypy>=0.812
+autopep8>=2.3.2
+
+# Type checking
+types-requests>=2.25.0
+types-selenium>=3.141.0
+
+# Documentation
+sphinx>=4.0.0
+sphinx-rtd-theme>=0.5.2
+
+# Build tools
+build>=0.7.0
+twine>=3.4.0

@@ -179,6 +179,46 @@ finally:
     automator.disconnect()
 ```
 
+## Contribution
+
+We welcome contributions! If you have suggestions or improvements, please fork the repository and submit a pull request.
+### Setting Up the Development Environment
+To set up the development environment, clone the repository and install the required dependencies:
+
+```bash
+# Clone the repository
+git clone https://github.com/LounisBou/SharewoodAutomator.git
+
+cd SharewoodAutomator
+
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Install the package
+pip install -e .
+
+# Install pre-commit hooks
+pre-commit install
+```
+
+Make your changes, create and run tests, and submit a pull request.
+Please ensure that your code adheres to the project's coding standards and passes all tests before submitting.
+
+Your pull request name should respect : [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 
+
+Pull requests that do not follow this format will be rejected.
+
+Pull requests will be squashed and merged into the main branch so branch names are not important.
+
+## Testing
+
+To run the tests, use the following command:
+
+```bash
+pytest tests/
+```
+This will execute all tests in the `tests` directory. 
+
 ## License
 
 [MIT License](LICENSE)
