@@ -30,12 +30,25 @@ pip install sharewoodautomator
 Create a `.env` file in your project root with the following variables:
 
 ```
-SHAREWOOD_URL=https://www.sharewood.tv
-SHAREWOOD_LOGIN=https://www.sharewood.tv/login
-SHAREWOOD_LOGOUT=https://www.sharewood.tv/logout
-SHAREWOOD_TORRENTS=https://www.sharewood.tv/torrents
-PSEUDO=your_username
-PASSWORD=your_password
+# Sharewood application configuration
+SHAREWOOD_URL="https://www.sharewood.tv"
+SHAREWOOD_LOGIN_URL="https://www.sharewood.tv/login"
+SHAREWOOD_LOGOUT_URL="https://www.sharewood.tv/logout"
+SHAREWOOD_TORRENTS_URL="https://www.sharewood.tv/torrents"
+SHAREWOOD_API_URL="https://www.sharewood.tv/api/"
+SHAREWOOD_PASSKEY="82eacd22bbde0c5231a318543158494e"
+# 
+# Selenium browser configuration
+# - Timeout in seconds
+BROWSER_TIMEOUT=60
+BROWSER_WAIT_TIMEOUT=60
+# 
+# Sharewood user credentials
+PSEUDO="username"
+PASSWORD="password"
+# 
+# Path to downloads directory
+DOWNLOAD_PATH="~/Downloads/Sharewood"
 ```
 
 ## Usage
