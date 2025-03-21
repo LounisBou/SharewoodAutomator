@@ -30,29 +30,32 @@ class ShareWoodAutomator:
 
         # Load environment variables
         self.env = self._load_env()
-        
+
         # Create selenium driver instance
         self.browser = self._init_driver(
-            headless, 
+            headless,
             timeout=self.env["BROWSER_TIMEOUT"]
         )
         # ShareWood logging
         self.logging = ShareWoodLogging(
-            browser=self.browser, 
+            browser=self.browser,
             home_url=self.env["SHAREWOOD_URL"],
-            login_url=self.env["SHAREWOOD_LOGIN_URL"], 
-            logout_url=self.env["SHAREWOOD_LOGOUT_URL"], 
+            login_url=self.env["SHAREWOOD_LOGIN_URL"],
+            logout_url=self.env["SHAREWOOD_LOGOUT_URL"],
             timeout=self.env["BROWSER_WAIT_TIMEOUT"]
         )
         # ShareWood search
         self.searcher = ShareWoodSearch(
-            browser=self.browser, 
-            search_url=self.env["SHAREWOOD_TORRENTS_URL"], 
+            browser=self.browser,
+            search_url=self.env["SHAREWOOD_TORRENTS_URL"],
             timeout=self.env["BROWSER_WAIT_TIMEOUT"]
         )
         # ShareWood torrents scraper
-        self.scraper = ShareWoodTorrentScraper(browser=self.browser)
-    
+        self.scraper = ShareWoodTorrentScraper(
+            browser=self.browser,
+            timeout=self.env["BROWSER_WAIT_TIMEOUT"]
+        )
+
     def __del__(self) -> None:
         """
         Cleanup ShareWood.tv automator
@@ -60,7 +63,7 @@ class ShareWoodAutomator:
 
         # Close browser window
         self.browser.quit()
-    
+
     def _load_env(self) -> Dict[str, str]:
         """
         Load environment variables from .env file
@@ -80,15 +83,15 @@ class ShareWoodAutomator:
             "PSEUDO": os.getenv("PSEUDO"),
             "PASSWORD": os.getenv("PASSWORD"),
         }
-        
+
         # Check if all required environment variables are set
         for key, value in env_vars.items():
             if value is None:
                 raise ValueError(f"Missing environment variable: {key}")
         return env_vars
-    
+
     def _init_driver(self, headless: bool, timeout: int) -> WebDriver:
-        """ 
+        """
         Initialize Chrome WebDriver with security optimizations
         Install Chrome WebDriver if not found
 
@@ -117,7 +120,7 @@ class ShareWoodAutomator:
         driver.set_page_load_timeout(timeout)
         # Set default script timeout for WebDriver
         driver.set_script_timeout(timeout)
-        
+
         return driver
 
     def connect(self) -> None:
@@ -133,16 +136,16 @@ class ShareWoodAutomator:
         """
         Disconnect from ShareWood.tv
         """
-        
+
         self.logging.disconnect()
-    
+
     def search(self, search_criteria: ShareWoodSearchCriteria) -> List[ShareWoodTorrent]:
         """
         Search for a torrent on ShareWood.tv
-        
+
         Args:
             search_criteria: Search criteria
-            
+
         Returns:
             list[ShareWoodTorrent]: List of torrents found
         """
@@ -152,11 +155,11 @@ class ShareWoodAutomator:
     def download(self, url: str) -> None:
         """
         Download a torrent from ShareWood.tv
-        
+
         Args:
             url: Torrent page URL
         """
-        
+
         # Create ShareWoodTorrent instance
         ShareWoodTorrent(url=url)
 
