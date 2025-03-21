@@ -47,6 +47,17 @@ SEARCH_CRITERIA_SELECTORS = {
     "quantity": ".qty",
 }
 
+TORRENT_RESULTS_SELECTORS = {
+    "url": "",
+    "title": "",
+    "age": "",
+    "size": "",
+    "comments": "",
+    "seeders": "",
+    "leechers": "",
+    "downloads": "",
+}
+
 TORRENT_SELECTORS = {
     "title": "#app > div.row > div > div:nth-child(1) > h1",
     "description": "#app > div.row > div > div:nth-child(1) > table > tbody > tr:nth-child(1) > td:nth-child(2)",

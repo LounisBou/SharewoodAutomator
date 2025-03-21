@@ -24,8 +24,8 @@ class ShareWoodTorrentScraper:
 
         self.browser = browser
         self.timeout = timeout
-        self.html = None
-        self.soup = None
+        self.html: str = None
+        self.soup: BeautifulSoup = None
 
     def _get_attribut_by_css_selector(self, attribut_name: str) -> str:
         """
@@ -78,7 +78,7 @@ class ShareWoodTorrentScraper:
         )
 
         # Get page HTML content
-        self.html = self.browser.page_source
+        self.html: str = self.browser.page_source
 
         # Parse HTML content using BeautifulSoup
         self.soup = BeautifulSoup(self.html, "html.parser")
