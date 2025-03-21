@@ -2,6 +2,7 @@
 max-line-length = 100
 exclude = .git,__pycache__,build,dist,venv,.env,env
 # Relaxed rules - whitespace, docstrings and comment rules
+# C0114: Missing module docstring
 # C901: Class method should use cls as first argument
 # D100: Missing docstring in public module
 # D107: Missing docstring in __init__
@@ -17,7 +18,7 @@ exclude = .git,__pycache__,build,dist,venv,.env,env
 # W291: Trailing whitespace
 # W293: Blank line contains whitespace
 # W503: Line break before binary operator
-ignore = C901,D100,D107,D200,D202,D205,D210,D400,D401,E203,E261,E501,W291,W293,W503
+ignore = C0114,C901,D100,D107,D200,D202,D205,D210,D400,D401,E203,E261,E501,W291,W293,W503
 max-complexity = 12
 per-file-ignores =
     __init__.py: F401
