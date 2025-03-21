@@ -268,15 +268,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-# Set up logger
-logger = logging.getLogger(__name__)
-
 class ShareWoodLogging:
     """Centralized logging facility for ShareWood.tv"""
 
     def __init__(self, browser: WebDriver, login_url: str, logout_url: str) -> None:
         """
-        Initialize a new logger for ShareWood.tv
+        ShareWood.tv logging manager
         
         Args:
             browser: selenium WebDriver instance
