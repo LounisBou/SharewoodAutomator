@@ -7,7 +7,10 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from sharewoodautomator.sharewoodselectors import LOGIN_SELECTORS
+from sharewoodautomator.sharewoodselectors import (
+    LOGIN_SELECTORS,
+    PAGE_CONTROLS_SELECTORS,
+)
 
 
 class ShareWoodLogging:
@@ -52,25 +55,57 @@ class ShareWoodLogging:
             print("Accessed ShareWood.tv login page")
 
             # Enter credentials and submit form
+
+            # - Username
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["username_input"]))
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, LOGIN_SELECTORS["username_input"])
+                )
             )
-            self.browser.find_element(By.CSS_SELECTOR, LOGIN_SELECTORS["username_input"]).send_keys(pseudo)
+            self.browser.find_element(
+                by=By.CSS_SELECTOR, value=LOGIN_SELECTORS["username_input"]
+            ).send_keys(pseudo)
+
+            # - Password
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["password_input"]))
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, LOGIN_SELECTORS["password_input"])
+                )
             )
-            self.browser.find_element(By.CSS_SELECTOR, LOGIN_SELECTORS["password_input"]).send_keys(password)
+            self.browser.find_element(
+                by=By.CSS_SELECTOR,
+                value=LOGIN_SELECTORS["password_input"]
+            ).send_keys(password)
 
             # Click on the login button
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, LOGIN_SELECTORS["login_button"]))
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, LOGIN_SELECTORS["login_button"])
+                )
             )
-            self.browser.find_element(By.CSS_SELECTOR, LOGIN_SELECTORS["login_button"]).click()
+            self.browser.find_element(
+                by=By.CSS_SELECTOR, value=LOGIN_SELECTORS["login_button"]
+            ).click()
 
             # Wait for the home page to load completely
             WebDriverWait(self.browser, self.timeout).until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, "#frame > .content > .messages"))
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "#frame > .content > .messages")
+                )
             )
+
+            # Search for cookie button and click it if present
+            try:
+                # Retrieve the cookie button element (dont wait for it)
+                cookie_button = self.browser.find_element(
+                    by=By.CSS_SELECTOR,
+                    value=PAGE_CONTROLS_SELECTORS["cookie_button"]
+                )
+                # Click the cookie button
+                cookie_button.click()
+                print("Cookie button clicked")
+            except TimeoutException:
+                print("Cookie button not found, continuing...")
 
             print("Successfully logged in to ShareWood.tv")
         except (TimeoutException, NoSuchElementException) as e:

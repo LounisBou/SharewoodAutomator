@@ -11,8 +11,9 @@ making it easier to update them when the website structure changes.
 # Page controls selectors
 PAGE_CONTROLS_SELECTORS = {
     "home": "#frame > div > div.messages",
+    "cookie_button": "button.cookies-btn",
     "torrents": "div#result",
-    "torrents_search": "form[@action='TorrentController@torrents']",
+    "torrents_search": "form.form-torrent-search",
     "torrent" : "table > div.prez-body",
 }
 

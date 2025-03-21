@@ -4,6 +4,7 @@
 from typing import List, Optional
 
 from bs4 import BeautifulSoup, Tag
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,7 +18,13 @@ from .sharewoodtorrent import ShareWoodTorrent
 class ShareWoodSearch():
     """Searches for torrents on ShareWood.tv"""
 
-    def __init__(self, browser: WebDriver, search_url: str, timeout: int, ignore_parsing_errors: Optional[bool] = False) -> None:
+    def __init__(
+        self,
+        browser: WebDriver,
+        search_url: str,
+        timeout: int,
+        ignore_parsing_errors: Optional[bool] = False
+    ) -> None:
         """
         Initialize a new session with ShareWood.tv
 
@@ -57,7 +64,9 @@ class ShareWoodSearch():
 
         # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"])
+            )
         )
 
         # Check if search box is visible
@@ -67,35 +76,47 @@ class ShareWoodSearch():
 
             # Check if query is provided
             if search_criteria.query:
-                # Find search input and enter search query
-                search_form.find_element(
-                    by=By.NAME,
-                    value=search_criteria.get_css_selector("query")
-                ).send_keys(search_criteria.query)
+                try:
+                    # Find search input and enter search query
+                    search_form.find_element(
+                        by=By.CSS_SELECTOR,
+                        value=search_criteria.get_css_selector("query")
+                    ).send_keys(search_criteria.query)
+                except NoSuchElementException as e:
+                    raise ValueError("Search input not found") from e
 
             # Check if description is provided
             if search_criteria.description:
-                # Find description input and enter description
-                search_form.find_element(
-                    by=By.CSS_SELECTOR,
-                    value=search_criteria.get_css_selector("description")
-                ).send_keys(search_criteria.description)
+                try:
+                    # Find description input and enter description
+                    search_form.find_element(
+                        by=By.CSS_SELECTOR,
+                        value=search_criteria.get_css_selector("description")
+                    ).send_keys(search_criteria.description)
+                except NoSuchElementException as e:
+                    raise ValueError("Description input not found") from e
 
             # Check if uploader is provided
             if search_criteria.uploader:
-                # Find uploader input and enter uploader
-                search_form.find_element(
-                    by=By.CSS_SELECTOR,
-                    value=search_criteria.get_css_selector("uploader")
-                ).send_keys(search_criteria.uploader)
+                try:
+                    # Find uploader input and enter uploader
+                    search_form.find_element(
+                        by=By.CSS_SELECTOR,
+                        value=search_criteria.get_css_selector("uploader")
+                    ).send_keys(search_criteria.uploader)
+                except NoSuchElementException as e:
+                    raise ValueError("Uploader input not found") from e
 
             # Check if tags are provided
             if search_criteria.tags:
-                # Find tags input and enter tags
-                search_form.find_element(
-                    by=By.CSS_SELECTOR,
-                    value=search_criteria.get_css_selector("tags")
-                ).send_keys(search_criteria.tags)
+                try:
+                    # Find tags input and enter tags
+                    search_form.find_element(
+                        by=By.CSS_SELECTOR,
+                        value=search_criteria.get_css_selector("tags")
+                    ).send_keys(search_criteria.tags)
+                except NoSuchElementException as e:
+                    raise ValueError("Tags input not found") from e
 
         else:
             raise ValueError("Search form is not loaded or not displayed")
@@ -110,27 +131,38 @@ class ShareWoodSearch():
 
         # Wait for form to load
         search_form = WebDriverWait(self.browser, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"]))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, PAGE_CONTROLS_SELECTORS["torrents_search"])
+            )
         )
 
         # Check if sorting is provided
         if search_criteria.sorting:
             # Find sorting select element by name
-            sorting_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("sorting"))
+            sorting_select_input = search_form.find_element(
+                by=By.CSS_SELECTOR,
+                value=search_criteria.get_css_selector("sorting")
+            )
             # Select sorting option by value
             sorting_select_input.select_by_value(search_criteria.sorting)
 
         # Check if direction is provided
         if search_criteria.direction:
             # Find direction select element by name
-            direction_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("direction"))
+            direction_select_input = search_form.find_element(
+                by=By.CSS_SELECTOR,
+                value=search_criteria.get_css_selector("direction")
+            )
             # Select direction option by value
             direction_select_input.select_by_value(search_criteria.direction)
 
         # Check if quantity is provided
         if search_criteria.quantity:
             # Find quantity select element by name
-            quantity_select_input = search_form.find_element(By.CSS_SELECTOR, search_criteria.get_css_selector("quantity"))
+            quantity_select_input = search_form.find_element(
+                by=By.CSS_SELECTOR,
+                value=search_criteria.get_css_selector("quantity")
+            )
             # Select quantity option by value
             quantity_select_input.select_by_value(search_criteria.quantity)
 
