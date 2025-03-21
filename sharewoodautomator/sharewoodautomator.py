@@ -33,9 +33,9 @@ class ShareWoodAutomator:
         # Load environment variables
         self.env = self._load_env()
         # ShareWood logging
-        self.logging = ShareWoodLogging(self.browser, self.env["SHAREWOOD_LOGIN"], self.env["SHAREWOOD_LOGOUT"])
+        self.logging = ShareWoodLogging(self.browser, self.env["SHAREWOOD_LOGIN_URL"], self.env["SHAREWOOD_LOGOUT_URL"])
         # ShareWood search
-        self.searcher = ShareWoodSearch(self.browser, self.env["SHAREWOOD_TORRENTS"])
+        self.searcher = ShareWoodSearch(self.browser, self.env["SHAREWOOD_TORRENTS_URL"])
         # ShareWood torrents scraper
         self.scraper = ShareWoodTorrentScraper(self.browser)
     
@@ -56,14 +56,20 @@ class ShareWoodAutomator:
         load_dotenv()
 
         # Return environment variables as dictionary
-        return {
+        env_vars = {
             "SHAREWOOD_URL": os.getenv("SHAREWOOD_URL"),
-            "SHAREWOOD_LOGIN": os.getenv("SHAREWOOD_LOGIN"),
-            "SHAREWOOD_LOGOUT": os.getenv("SHAREWOOD_LOGOUT"),
-            "SHAREWOOD_TORRENTS": os.getenv("SHAREWOOD_TORRENTS"),
+            "SHAREWOOD_LOGIN_URL": os.getenv("SHAREWOOD_LOGIN_URL"),
+            "SHAREWOOD_LOGOUT_URL": os.getenv("SHAREWOOD_LOGOUT_URL"),
+            "SHAREWOOD_TORRENTS_URL": os.getenv("SHAREWOOD_TORRENTS_URL"),
             "PSEUDO": os.getenv("PSEUDO"),
             "PASSWORD": os.getenv("PASSWORD"),
         }
+        
+        # Check if all required environment variables are set
+        for key, value in env_vars.items():
+            if value is None:
+                raise ValueError(f"Missing environment variable: {key}")
+        return env_vars
     
     def _init_driver(self, headless: bool) -> WebDriver:
         """ 

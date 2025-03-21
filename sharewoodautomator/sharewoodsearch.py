@@ -41,7 +41,7 @@ class ShareWoodSearch():
         Args:
             search_criteria: Search criteria for ShareWood.tv
         """
-
+        
         # Navigate to ShareWood.tv
         self.browser.get(self.search_url)
 

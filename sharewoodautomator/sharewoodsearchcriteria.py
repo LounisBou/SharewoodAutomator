@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from dataclasses import dataclass, field
-from typing import Dict, Set
+from typing import Dict, Optional, Set
 
 
 @dataclass
 class ShareWoodSearchCriteria:
     """Search criteria for ShareWood.tv"""
 
-    query: str = field(
+    query: Optional[str] = field(
         default=None, 
         metadata={
             "id": "search", 
@@ -17,7 +17,7 @@ class ShareWoodSearchCriteria:
             "placeholder": "Nom / Titre",
         }
     )
-    description: str = field(
+    description: Optional[str] = field(
         default=None, 
         metadata={
             "id": "description", 
@@ -25,16 +25,16 @@ class ShareWoodSearchCriteria:
             "placeholder": "Acteur, Réalisateur, Langue, ..."
         }
     )
-    uploader: str = field(
+    uploader: Optional[str] = field(
         default=None, 
         metadata={"placeholder": "Nom de l'uploader"}
     )
-    tags: str = field(
+    tags: Optional[str] = field(
         default=None, 
         metadata={"placeholder": "tags"}
     )
-    categories: Dict[str, bool] = field(
-        default={
+    categories: Optional[Dict[str, bool]] = field(
+        default_factory=lambda: {
             "Vidéos": False, 
             "Audios": False, 
             "Applications": False, 
@@ -44,18 +44,18 @@ class ShareWoodSearchCriteria:
         }, 
         metadata={"class": "category category-parent"}
     )
-    subcategories: Dict[str, bool] = field(
-        default={
+    subcategories: Optional[Dict[str, bool]] = field(
+        default_factory=lambda: {
             "Application Linux": False,
             "Application Mac": False,
             "Application Smartphone/Tablette": False,
             "Application Windows": False,
             "GPS": False,
-        }, 
+        },
         metadata={"class": "subcategory"}
     )
-    languages: Dict[str, bool] = field(
-        default={
+    languages: Optional[Dict[str, bool]] = field(
+        default_factory=lambda: {
             "Français": False, 
             "Anglais": False, 
             "Québécois": False,
@@ -67,8 +67,8 @@ class ShareWoodSearchCriteria:
         },
         metadata={"class": "subcategory"}
     )
-    type: Dict[str, bool] = field(
-        default={
+    types: Optional[Dict[str, bool]] = field(
+        default_factory=lambda: {
             "stream": False, 
             "sd": False,
             "freeleech": False, 
@@ -78,27 +78,27 @@ class ShareWoodSearchCriteria:
         },
         metadata={"class": "subcategory"}
     )
-    sorting_values: Set[str] = field(
-        default={'created_at', 'name', 'seeders', 'leechers', 'times_Completed', 'Size'},
+    sorting_values: Optional[Set[str]] = field(
+        default_factory=lambda: {'created_at', 'name', 'seeders', 'leechers', 'times_Completed', 'Size'},
         metadata={"id": "sorting", "name": "sorting", "class": "form-control"}
     )
-    sorting: Set[str] = field(
-        default=None, # Default will be "created_at"
+    sorting: Optional[str] = field(
+        default=None, 
         metadata={"id": "sort", "name": "sort", "class": "form-control"}
     )
-    direction_values: Set[str] = field(
-        default={"asc", "desc"},
+    direction_values: Optional[Set[str]] = field(
+        default_factory=lambda: {"asc", "desc"},
         metadata={"id": "direction", "name": "direction", "class": "form-control"}
     )
-    direction: Set[str] = field(
-        default=None, # Default will be "desc"
+    direction: Optional[str] = field(
+        default=None, 
         metadata={"id": "direction", "name": "direction", "class": "form-control"}
     )
-    quantity_values: Set[int] = field(
-        default={25, 50, 100},
+    quantity_values: Optional[Set[int]] = field(
+        default_factory=lambda: {25, 50, 100},
         metadata={"id": "qty", "name": "qty", "class": "form-control"}
     )
-    quantity: Set[int] = field(
-        default=None, # Default will be 25
+    quantity: Optional[int] = field(
+        default=None, 
         metadata={"id": "qty", "name": "qty", "class": "form-control"}
     )
