@@ -16,7 +16,14 @@ from sharewoodautomator.sharewoodselectors import (
 class ShareWoodLogging:
     """Centralized logging facility for ShareWood.tv"""
 
-    def __init__(self, browser: WebDriver, home_url: str, login_url: str, logout_url: str, timeout: int) -> None:
+    def __init__(
+        self,
+        browser: WebDriver,
+        home_url: str,
+        login_url: str,
+        logout_url: str,
+        timeout: int
+    ) -> None:
         """
         ShareWood.tv logging manager
 
